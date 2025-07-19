@@ -69,9 +69,20 @@ const RegisterPage: React.FC = () => {
       clearError();
       // Удаляем подтверждение пароля из данных для отправки
       const { confirmPassword, ...registerData } = values;
+      
+      // Отладочный вывод
+      console.log('Данные формы:', values);
+      console.log('Данные для регистрации:', registerData);
+      
       const success = await register(registerData as RegisterData);
       if (success) {
         navigate('/');
+      } else {
+        // Если произошла ошибка, прокручиваем страницу к сообщению об ошибке
+        const errorElement = document.querySelector('.MuiAlert-root');
+        if (errorElement) {
+          errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
       }
     },
   });
@@ -105,7 +116,11 @@ const RegisterPage: React.FC = () => {
           </Typography>
           
           {error && (
-            <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
+            <Alert 
+              severity="error" 
+              sx={{ mt: 2, width: '100%' }}
+              onClose={() => clearError()}
+            >
               {error}
             </Alert>
           )}

@@ -2,10 +2,14 @@ import pytest
 from flask_jwt_extended import create_access_token
 import os
 import tempfile
+import sys
 
-from app.main import create_app
-from app.db.session import db as _db
-from app.models import User, UserRole, Category, Supplier, Product
+# Добавляем путь проекта в PYTHONPATH
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
+
+from backend.app.main import create_app
+from backend.app.core.extensions import db as _db
+from backend.app.models import User, UserRole, Category, Supplier, Product
 
 
 @pytest.fixture(scope="session")
@@ -50,13 +54,13 @@ def client(app):
 @pytest.fixture(scope="function")
 def admin_user(db):
     """Создание администратора для тестов."""
-    user = User(
-        email="admin@example.com",
-        name="Admin User",
-        role=UserRole.ADMIN,
-        is_active=True
-    )
-    user.password = "password123"
+    user = User()
+    user.email = "admin@example.com"
+    user.name = "Admin User"
+    user.role = UserRole.ADMIN.value
+    user.is_active = True
+    user.set_password("password123")
+    
     db.session.add(user)
     db.session.commit()
     return user
@@ -65,13 +69,13 @@ def admin_user(db):
 @pytest.fixture(scope="function")
 def employee_user(db):
     """Создание обычного сотрудника для тестов."""
-    user = User(
-        email="employee@example.com",
-        name="Employee User",
-        role=UserRole.EMPLOYEE,
-        is_active=True
-    )
-    user.password = "password123"
+    user = User()
+    user.email = "employee@example.com"
+    user.name = "Employee User"
+    user.role = UserRole.EMPLOYEE.value
+    user.is_active = True
+    user.set_password("password123")
+    
     db.session.add(user)
     db.session.commit()
     return user
@@ -80,13 +84,13 @@ def employee_user(db):
 @pytest.fixture(scope="function")
 def owner_user(db):
     """Создание владельца для тестов."""
-    user = User(
-        email="owner@example.com",
-        name="Owner User",
-        role=UserRole.OWNER,
-        is_active=True
-    )
-    user.password = "password123"
+    user = User()
+    user.email = "owner@example.com"
+    user.name = "Owner User"
+    user.role = UserRole.OWNER.value
+    user.is_active = True
+    user.set_password("password123")
+    
     db.session.add(user)
     db.session.commit()
     return user
@@ -134,7 +138,10 @@ def owner_auth_header(owner_token):
 @pytest.fixture(scope="function")
 def category(db):
     """Создание тестовой категории."""
-    category = Category(name="Test Category", description="Test Description")
+    category = Category()
+    category.name = "Test Category"
+    category.description = "Test Description"
+    
     db.session.add(category)
     db.session.commit()
     return category
@@ -143,13 +150,13 @@ def category(db):
 @pytest.fixture(scope="function")
 def supplier(db):
     """Создание тестового поставщика."""
-    supplier = Supplier(
-        name="Test Supplier",
-        email="supplier@example.com",
-        phone="1234567890",
-        address="Test Address",
-        contact_person="Test Contact"
-    )
+    supplier = Supplier()
+    supplier.name = "Test Supplier"
+    supplier.email = "supplier@example.com"
+    supplier.phone = "1234567890"
+    supplier.address = "Test Address"
+    supplier.contact_person = "Test Contact"
+    
     db.session.add(supplier)
     db.session.commit()
     return supplier
@@ -158,16 +165,16 @@ def supplier(db):
 @pytest.fixture(scope="function")
 def product(db, category, supplier):
     """Создание тестового товара."""
-    product = Product(
-        name="Test Product",
-        sku="TEST-SKU-001",
-        description="Test Product Description",
-        price=100.0,
-        quantity=50,
-        min_stock=10,
-        category_id=category.id,
-        supplier_id=supplier.id
-    )
+    product = Product()
+    product.name = "Test Product"
+    product.sku = "TEST-SKU-001"
+    product.description = "Test Product Description"
+    product.price = 100.0
+    product.quantity = 50
+    product.min_stock = 10
+    product.category_id = category.id
+    product.supplier_id = supplier.id
+    
     db.session.add(product)
     db.session.commit()
     return product 

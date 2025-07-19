@@ -1,0 +1,40 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.forecast-chart-card {
+  margin-bottom: $spacing-unit * 3;
+  @include box-shadow(1);
+  @include transition;
+
+  &:hover {
+    @include box-shadow(2);
+  }
+
+  .forecast-title {
+    margin-bottom: $spacing-unit;
+  }
+
+  .forecast-loading {
+    @include flex-center;
+    flex-direction: column;
+    padding: $spacing-unit * 3;
+    height: 400px;
+
+    .ant-spin {
+      margin-bottom: $spacing-unit * 2;
+    }
+  }
+}
+
+// Темный режим
+:global(body.dark-mode) {
+  .forecast-chart-card {
+    background-color: darken($background-dark, 3%);
+    border-color: $background-dark;
+
+    .forecast-title,
+    .ant-typography {
+      color: $text-color-light;
+    }
+  }
+} 

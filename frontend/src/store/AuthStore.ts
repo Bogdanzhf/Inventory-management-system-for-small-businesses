@@ -74,7 +74,9 @@ export class AuthStore {
     this.error = null;
     
     try {
+      console.log('Отправка данных регистрации:', data);
       const response = await apiService.auth.register(data);
+      console.log('Ответ от сервера после регистрации:', response.data);
       const authData: Auth = response.data;
       
       runInAction(() => {
@@ -89,9 +91,35 @@ export class AuthStore {
       
       return true;
     } catch (error: any) {
+      console.error('Ошибка при регистрации:', error);
+      let errorMessage = 'Ошибка регистрации';
+      
+      if (error.response) {
+        // Получаем сообщение об ошибке с сервера
+        if (error.response.data && error.response.data.message) {
+          errorMessage = error.response.data.message;
+        }
+        
+        // Если есть ошибки валидации
+        if (error.response.data && error.response.data.errors) {
+          const errors = error.response.data.errors;
+          const errorMessages = Object.values(errors).flat();
+          if (errorMessages.length > 0) {
+            errorMessage = errorMessages.join(', ');
+          }
+        }
+        
+        console.error('Детали ошибки:', error.response.data);
+      } else if (error.request) {
+        errorMessage = 'Нет ответа от сервера. Проверьте подключение к интернету.';
+        console.error('Нет ответа:', error.request);
+      } else {
+        console.error('Ошибка запроса:', error.message);
+      }
+      
       runInAction(() => {
         this.isAuthenticated = false;
-        this.error = error.response?.data?.message || 'Ошибка регистрации';
+        this.error = errorMessage;
         this.isLoading = false;
       });
       

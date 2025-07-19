@@ -19,7 +19,7 @@ class User(BaseModel):
     email = Column(String(255), unique=True, nullable=False, index=True)
     password_hash = Column(String(255), nullable=False)
     name = Column(String(255), nullable=False)
-    role = Column(Enum(UserRole), nullable=False, default=UserRole.EMPLOYEE)
+    role = Column(String, nullable=False, default=UserRole.EMPLOYEE.value)
     is_active = Column(Boolean, default=True)
     phone = Column(String(20), nullable=True)
     
@@ -33,17 +33,21 @@ class User(BaseModel):
         """Хеширование пароля"""
         self.password_hash = generate_password_hash(password)
     
+    def set_password(self, password):
+        """Хеширование пароля"""
+        self.password_hash = generate_password_hash(password)
+    
     def verify_password(self, password):
         """Проверка пароля"""
         return check_password_hash(self.password_hash, password)
     
     def is_admin(self):
         """Проверка, является ли пользователь администратором"""
-        return self.role == UserRole.ADMIN
+        return self.role == UserRole.ADMIN.value
     
     def is_owner(self):
         """Проверка, является ли пользователь владельцем"""
-        return self.role == UserRole.OWNER
+        return self.role == UserRole.OWNER.value
     
     def __repr__(self):
         return f"<User {self.email}>" 

@@ -1,0 +1,68 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.restock-recommendations-card {
+  margin-bottom: $spacing-unit * 3;
+  @include box-shadow(1);
+  @include transition;
+
+  &:hover {
+    @include box-shadow(2);
+  }
+
+  .restock-title {
+    margin-bottom: $spacing-unit * 2;
+  }
+
+  .restock-loading {
+    @include flex-center;
+    flex-direction: column;
+    padding: $spacing-unit * 3;
+    min-height: 200px;
+
+    .ant-spin {
+      margin-bottom: $spacing-unit * 2;
+    }
+  }
+
+  .restock-table {
+    .ant-table-thead > tr > th {
+      font-weight: $font-weight-medium;
+    }
+
+    .ant-btn {
+      display: flex;
+      align-items: center;
+      gap: $spacing-unit;
+    }
+  }
+}
+
+// Темный режим
+:global(body.dark-mode) {
+  .restock-recommendations-card {
+    background-color: darken($background-dark, 3%);
+    border-color: $background-dark;
+
+    .restock-title,
+    .ant-typography,
+    .ant-table {
+      color: $text-color-light;
+    }
+
+    .ant-table-thead > tr > th {
+      background-color: darken($background-dark, 6%);
+      color: $text-color-light;
+    }
+
+    .ant-table-tbody > tr > td {
+      background-color: darken($background-dark, 3%);
+      border-bottom-color: $background-dark;
+    }
+
+    .ant-pagination-item-link {
+      background-color: darken($background-dark, 3%);
+      color: $text-color-light;
+    }
+  }
+} 

@@ -35,6 +35,7 @@ const LoginPage: React.FC = () => {
   const { login, error, isLoading, clearError } = authStore;
   
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -56,9 +57,17 @@ const LoginPage: React.FC = () => {
     validationSchema,
     onSubmit: async (values) => {
       clearError();
-      const success = await login(values);
-      if (success) {
-        navigate('/');
+      console.log('Выполняем вход с данными:', values);
+      try {
+        const success = await login(values);
+        console.log('Результат входа:', success);
+        if (success) {
+          navigate('/');
+        } else {
+          console.error('Ошибка входа:', error);
+        }
+      } catch (err) {
+        console.error('Исключение при входе:', err);
       }
     },
   });
@@ -92,12 +101,16 @@ const LoginPage: React.FC = () => {
           </Typography>
           
           {error && (
-            <Alert severity="error" sx={{ mt: 2, width: '100%' }}>
+            <Alert 
+              severity="error" 
+              sx={{ mt: 2, width: '100%' }}
+              onClose={() => clearError()}
+            >
               {error}
             </Alert>
           )}
           
-          <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 1, width: '100%' }}>
+          <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 3, width: '100%' }}>
             <TextField
               margin="normal"
               required
@@ -142,15 +155,22 @@ const LoginPage: React.FC = () => {
               }}
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={
+                <Checkbox 
+                  value="remember" 
+                  color="primary" 
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                />
+              }
               label={t('auth.rememberMe')}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              disabled={isLoading}
               sx={{ mt: 3, mb: 2 }}
+              disabled={isLoading}
             >
               {isLoading ? <CircularProgress size={24} /> : t('auth.login')}
             </Button>

@@ -22,59 +22,13 @@ import {
   Inventory2Outlined as InventoryIcon,
   WarningAmberOutlined as WarningIcon,
   ShoppingCartOutlined as OrderIcon,
-  HourglassEmptyOutlined as PendingIcon,
   InfoOutlined as InfoIcon,
 } from '@mui/icons-material';
 
 import { apiService } from '../../services/api';
 import { useStores } from '../../store';
 import { Product, Order, OrderStatus } from '../../types/models';
-
-// Компонент виджета статистики
-const StatCard: React.FC<{
-  title: string;
-  value: string | number;
-  icon: React.ReactNode;
-  color: string;
-  onClick?: () => void;
-}> = ({ title, value, icon, color, onClick }) => (
-  <Card 
-    elevation={2} 
-    sx={{ 
-      minHeight: 140, 
-      display: 'flex', 
-      flexDirection: 'column',
-      cursor: onClick ? 'pointer' : 'default',
-      transition: 'transform 0.2s',
-      '&:hover': onClick ? {
-        transform: 'translateY(-4px)',
-        boxShadow: 3
-      } : {}
-    }}
-    onClick={onClick}
-  >
-    <CardContent>
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-        <Box
-          sx={{
-            bgcolor: `${color}.light`,
-            color: `${color}.main`,
-            p: 1,
-            borderRadius: 1,
-            mr: 2,
-            display: 'flex',
-          }}
-        >
-          {icon}
-        </Box>
-        <Typography variant="h6" color="text.secondary">
-          {title}
-        </Typography>
-      </Box>
-      <Typography variant="h4">{value}</Typography>
-    </CardContent>
-  </Card>
-);
+import StatisticsCards from '../../components/AntComponents/StatisticsCards';
 
 // Компонент для отображения низкого запаса товаров
 const LowStockWidget: React.FC<{ products: Product[], navigate: (path: string) => void }> = ({ products, navigate }) => {
@@ -254,86 +208,49 @@ const DashboardPage: React.FC = () => {
         const allOrdersResponse = await apiService.orders.getAll();
         
         const products = productsResponse.data || [];
-        const orders = allOrdersResponse.data || [];
+        const allOrders = allOrdersResponse.data || [];
+        const pendingOrders = allOrders.filter((order: Order) => order.status === OrderStatus.PENDING);
         
         setStats({
           totalProducts: products.length,
           lowStockCount: lowStockProducts.length,
-          totalOrders: orders.length,
-          pendingOrders: orders.filter((order: Order) => order.status === OrderStatus.PENDING).length,
+          totalOrders: allOrders.length,
+          pendingOrders: pendingOrders.length,
         });
-        
-        // Добавляем lowStockProducts.length в зависимости хука useEffect
       } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-        uiStore.showError(t('common.error'));
+        console.error('Ошибка загрузки данных для дашборда:', error);
+        uiStore.showSnackbar(t('common.error'), 'error');
       } finally {
         setIsLoading(false);
       }
     };
-
+    
     fetchDashboardData();
-  }, [t, uiStore, lowStockProducts.length]);
+  }, [uiStore, t, lowStockProducts.length]);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box>
       <Typography variant="h4" component="h1" gutterBottom>
         {t('dashboard.title')}
       </Typography>
-      
-      {isLoading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', p: 5 }}>
-          <LinearProgress sx={{ width: '50%' }} />
-        </Box>
-      ) : (
-        <Grid container spacing={3}>
-          {/* Статистика */}
-          <Grid item xs={12} sm={6} md={3}>
-            <StatCard
-              title={t('dashboard.totalProducts')}
-              value={stats.totalProducts}
-              icon={<InventoryIcon />}
-              color="primary"
-              onClick={() => navigate('/products')}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <StatCard
-              title={t('dashboard.lowStock')}
-              value={stats.lowStockCount}
-              icon={<WarningIcon />}
-              color="warning"
-              onClick={() => navigate('/products?low_stock=true')}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <StatCard
-              title={t('dashboard.totalOrders')}
-              value={stats.totalOrders}
-              icon={<OrderIcon />}
-              color="success"
-              onClick={() => navigate('/orders')}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <StatCard
-              title={t('dashboard.pendingOrders')}
-              value={stats.pendingOrders}
-              icon={<PendingIcon />}
-              color="info"
-              onClick={() => navigate('/orders?status=pending')}
-            />
-          </Grid>
-          
-          {/* Виджеты */}
-          <Grid item xs={12} md={6}>
-            <LowStockWidget products={lowStockProducts} navigate={navigate} />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <RecentOrdersWidget orders={recentOrders} navigate={navigate} />
-          </Grid>
+
+      {/* Статистика с использованием Ant Design компонента */}
+      <StatisticsCards
+        totalProducts={stats.totalProducts}
+        lowStockProducts={stats.lowStockCount}
+        totalOrders={stats.totalOrders}
+        pendingOrders={stats.pendingOrders}
+        loading={isLoading}
+      />
+
+      <Grid container spacing={3} mt={2}>
+        <Grid item xs={12} md={6}>
+          <LowStockWidget products={lowStockProducts} navigate={navigate} />
         </Grid>
-      )}
+        <Grid item xs={12} md={6}>
+          <RecentOrdersWidget orders={recentOrders} navigate={navigate} />
+        </Grid>
+      </Grid>
     </Box>
   );
 };

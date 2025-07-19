@@ -2,11 +2,41 @@ import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
 // Создаем экземпляр axios с базовыми настройками
 const api: AxiosInstance = axios.create({
-  baseURL: '/api', // Будет проксироваться через React в development
+  baseURL: '/api', // Будет проксироваться через nginx
   headers: {
     'Content-Type': 'application/json',
   },
 });
+
+// Для отладки запросов
+api.interceptors.request.use(
+  (config) => {
+    console.log(`Отправка запроса: ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`);
+    return config;
+  },
+  (error) => {
+    console.error('Ошибка запроса:', error);
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => {
+    console.log(`Получен ответ: ${response.status} для ${response.config.url}`);
+    return response;
+  },
+  (error) => {
+    if (error.response) {
+      console.error(`Ошибка ответа: ${error.response.status} ${error.response.statusText} для ${error.config.url}`);
+      console.error('Данные ошибки:', error.response.data);
+    } else if (error.request) {
+      console.error('Нет ответа от сервера:', error.request);
+    } else {
+      console.error('Ошибка запроса:', error.message);
+    }
+    return Promise.reject(error);
+  }
+);
 
 // Перехватчик для добавления токена авторизации к запросам
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {

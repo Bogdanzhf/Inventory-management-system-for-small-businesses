@@ -1,0 +1,70 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.statistics-cards {
+  margin-bottom: $spacing-unit * 3;
+
+  .statistics-title {
+    margin-bottom: $spacing-unit * 2;
+  }
+
+  .statistics-card {
+    height: 100%;
+    @include transition;
+
+    &:hover {
+      @include box-shadow(2);
+      transform: translateY(-4px);
+    }
+
+    &.product-card {
+      border-left: 4px solid $primary-color;
+    }
+
+    &.low-stock-card {
+      border-left: 4px solid $error-color;
+    }
+
+    &.orders-card {
+      border-left: 4px solid $success-color;
+    }
+
+    &.pending-card {
+      border-left: 4px solid $warning-color;
+    }
+
+    // Добавляем анимацию при наведении
+    .ant-statistic-title {
+      font-weight: $font-weight-medium;
+      @include transition(color);
+    }
+
+    .ant-statistic-content {
+      @include transition(transform);
+    }
+
+    &:hover {
+      .ant-statistic-content {
+        transform: scale(1.05);
+      }
+    }
+  }
+}
+
+// Темный режим
+:global(body.dark-mode) {
+  .statistics-cards {
+    .statistics-card {
+      background-color: darken($background-dark, 3%);
+      border-color: $background-dark;
+
+      .ant-statistic-title {
+        color: $text-color-light;
+      }
+
+      .ant-statistic-content-value {
+        color: $text-color-light;
+      }
+    }
+  }
+} 

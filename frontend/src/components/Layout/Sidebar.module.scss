@@ -1,0 +1,59 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.drawer {
+  width: $drawer-width;
+  flex-shrink: 0;
+}
+
+.drawerPaper {
+  width: $drawer-width;
+  box-sizing: border-box;
+  border-right: 1px solid rgba($color-border, 0.12);
+}
+
+.drawerContainer {
+  overflow: auto;
+  padding: 8px;
+}
+
+.activeItem {
+  background-color: rgba($primary-color, 0.08);
+  color: $primary-color;
+  
+  &:hover {
+    background-color: rgba($primary-color, 0.12);
+  }
+  
+  .MuiListItemIcon-root {
+    color: $primary-color;
+  }
+}
+
+.divider {
+  margin: 8px 0;
+}
+
+:global(body.dark-mode) {
+  .drawerPaper {
+    background-color: $dark-paper;
+    border-color: rgba($dark-border, 0.2);
+  }
+  
+  .activeItem {
+    background-color: rgba($dark-primary, 0.15);
+    color: $dark-primary;
+    
+    &:hover {
+      background-color: rgba($dark-primary, 0.25);
+    }
+    
+    .MuiListItemIcon-root {
+      color: $dark-primary;
+    }
+  }
+  
+  .divider {
+    background-color: rgba($dark-border, 0.3);
+  }
+} 

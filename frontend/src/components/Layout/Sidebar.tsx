@@ -12,7 +12,7 @@ import {
   Divider,
   ListItemButton,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import classNames from 'classnames';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import InventoryIcon from '@mui/icons-material/Inventory';
@@ -24,23 +24,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 
 import { useStores } from '../../store';
 import { UserRole } from '../../types/models';
+import styles from './Sidebar.module.scss';
 
-interface Props {
-  drawerWidth: number;
-}
-
-const StyledDrawer = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'drawerWidth' })<{
-  drawerWidth: number;
-}>(({ theme, drawerWidth }) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  '& .MuiDrawer-paper': {
-    width: drawerWidth,
-    boxSizing: 'border-box',
-  },
-}));
-
-const Sidebar: React.FC<Props> = ({ drawerWidth }) => {
+const Sidebar: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -110,45 +96,56 @@ const Sidebar: React.FC<Props> = ({ drawerWidth }) => {
   };
 
   return (
-    <StyledDrawer
+    <Drawer
       variant="persistent"
       anchor="left"
       open={sidebarOpen}
-      drawerWidth={drawerWidth}
+      className={styles.drawer}
+      classes={{
+        paper: styles.drawerPaper
+      }}
     >
       <Toolbar />
-      <List component="nav">
-        {menuItems.map((item) => (
-          hasRole(item.roles) && (
-            <ListItem key={item.path} disablePadding>
-              <ListItemButton
-                onClick={() => navigate(item.path)}
-                selected={isActive(item.path)}
-              >
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItemButton>
-            </ListItem>
-          )
-        ))}
-      </List>
-      <Divider />
-      <List component="nav">
-        {accountItems.map((item) => (
-          hasRole(item.roles) && (
-            <ListItem key={item.path} disablePadding>
-              <ListItemButton
-                onClick={() => navigate(item.path)}
-                selected={isActive(item.path)}
-              >
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItemButton>
-            </ListItem>
-          )
-        ))}
-      </List>
-    </StyledDrawer>
+      <div className={styles.drawerContainer}>
+        <List component="nav">
+          {menuItems.map((item) => (
+            hasRole(item.roles) && (
+              <ListItem key={item.path} disablePadding>
+                <ListItemButton
+                  onClick={() => navigate(item.path)}
+                  selected={isActive(item.path)}
+                  className={classNames({
+                    [styles.activeItem]: isActive(item.path)
+                  })}
+                >
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} />
+                </ListItemButton>
+              </ListItem>
+            )
+          ))}
+        </List>
+        <Divider className={styles.divider} />
+        <List component="nav">
+          {accountItems.map((item) => (
+            hasRole(item.roles) && (
+              <ListItem key={item.path} disablePadding>
+                <ListItemButton
+                  onClick={() => navigate(item.path)}
+                  selected={isActive(item.path)}
+                  className={classNames({
+                    [styles.activeItem]: isActive(item.path)
+                  })}
+                >
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} />
+                </ListItemButton>
+              </ListItem>
+            )
+          ))}
+        </List>
+      </div>
+    </Drawer>
   );
 };
 

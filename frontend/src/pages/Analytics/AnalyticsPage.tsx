@@ -48,6 +48,8 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import WarningIcon from '@mui/icons-material/Warning';
 import UpdateIcon from '@mui/icons-material/Update';
+import ForecastChart from '../../components/AntComponents/ForecastChart';
+import RestockRecommendations from '../../components/AntComponents/RestockRecommendations';
 
 // Интерфейсы для данных
 interface InventoryForecast {
@@ -494,52 +496,14 @@ const AnalyticsPage: React.FC = observer(() => {
       {/* Прогнозы */}
       {tabValue === 1 && (
         <Box>
-          <Card>
-            <CardHeader 
-              title={t('analytics.inventoryForecasts')} 
-              subheader={selectedProduct ? products.find(p => p.id === selectedProduct)?.name : ''}
-            />
-            <Divider />
-            <CardContent>
-              {loading ? (
-                <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
-                  <CircularProgress />
-                </Box>
-              ) : forecasts.length > 0 ? (
-                <ResponsiveContainer width="100%" height={400}>
-                  <LineChart
-                    data={forecasts}
-                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="date" 
-                      tickFormatter={formatDate}
-                      tick={{ fontSize: 12 }}
-                      interval={Math.ceil(forecasts.length / 15)}
-                    />
-                    <YAxis />
-                    <Tooltip 
-                      formatter={(value: number) => [`${value}`, t('analytics.predictedQuantity')]}
-                      labelFormatter={formatDate}
-                    />
-                    <Legend />
-                    <Line 
-                      type="monotone" 
-                      dataKey="predicted_quantity" 
-                      name={t('analytics.predictedQuantity')}
-                      stroke="#8884d8" 
-                      activeDot={{ r: 8 }} 
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              ) : (
-                <Alert severity="info">
-                  {t('analytics.noForecastData')}
-                </Alert>
-              )}
-            </CardContent>
-          </Card>
+          <ForecastChart
+            data={forecasts.map(f => ({
+              date: f.date,
+              predicted_quantity: f.predicted_quantity
+            }))}
+            productName={selectedProduct ? products.find(p => p.id === selectedProduct)?.name : ''}
+            loading={loading}
+          />
           
           <Box sx={{ mt: 3 }}>
             <Typography variant="h6" gutterBottom>
@@ -561,62 +525,23 @@ const AnalyticsPage: React.FC = observer(() => {
       {/* Рекомендации */}
       {tabValue === 2 && (
         <Box>
-          <Card>
-            <CardHeader title={t('analytics.restockRecommendations')} />
-            <Divider />
-            <CardContent>
-              {loading ? (
-                <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
-                  <CircularProgress />
-                </Box>
-              ) : recommendations.length > 0 ? (
-                <TableContainer>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>{t('inventory.name')}</TableCell>
-                        <TableCell align="right">{t('inventory.currentStock')}</TableCell>
-                        <TableCell align="right">{t('inventory.minThreshold')}</TableCell>
-                        <TableCell align="right">{t('analytics.daysUntilThreshold')}</TableCell>
-                        <TableCell align="right">{t('analytics.recommendedOrderQuantity')}</TableCell>
-                        <TableCell align="right">{t('analytics.urgency')}</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {recommendations.map((item) => (
-                        <TableRow key={item.product_id}>
-                          <TableCell>{item.product_name}</TableCell>
-                          <TableCell align="right">{item.current_quantity}</TableCell>
-                          <TableCell align="right">{item.min_threshold}</TableCell>
-                          <TableCell align="right">{item.days_until_threshold.toFixed(1)}</TableCell>
-                          <TableCell align="right">{item.recommended_order_quantity}</TableCell>
-                          <TableCell align="right">
-                            <Chip
-                              label={
-                                item.days_until_threshold <= 3 ? t('analytics.urgent') :
-                                item.days_until_threshold <= 7 ? t('analytics.soon') :
-                                t('analytics.normal')
-                              }
-                              color={
-                                item.days_until_threshold <= 3 ? 'error' :
-                                item.days_until_threshold <= 7 ? 'warning' :
-                                'success'
-                              }
-                              size="small"
-                            />
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              ) : (
-                <Alert severity="info">
-                  {t('analytics.noRecommendations')}
-                </Alert>
-              )}
-            </CardContent>
-          </Card>
+          <RestockRecommendations
+            recommendations={recommendations.map(r => ({
+              product_id: r.product_id,
+              product_name: r.product_name,
+              current_quantity: r.current_quantity,
+              min_stock: r.min_threshold,
+              recommended_qty: r.recommended_order_quantity,
+              days_until_stockout: r.days_until_threshold,
+              avg_daily_demand: r.days_until_threshold > 0 ? r.current_quantity / r.days_until_threshold : 0
+            }))}
+            loading={loading}
+            onCreateOrder={(productId, quantity) => {
+              // Здесь можно добавить логику для создания заказа
+              console.log(`Создание заказа для продукта с ID: ${productId}, количество: ${quantity}`);
+              uiStore.showSnackbar(t('analytics.orderCreationNotImplemented'), 'info');
+            }}
+          />
           
           <Box sx={{ mt: 3 }}>
             <Typography variant="h6" gutterBottom>

@@ -1,0 +1,61 @@
+// Цвета
+$primary-color: #1976d2;
+$primary-light: #4791db;
+$primary-dark: #115293;
+$secondary-color: #f50057;
+$secondary-light: #f73378;
+$secondary-dark: #ab003c;
+$background-color: #ffffff;
+$paper-color: #ffffff;
+$background-dark: #121212;
+$dark-paper: #1e1e1e;
+$text-color: #333333;
+$text-dark: #f5f5f5;
+$text-color-light: #f5f5f5;
+$text-color-secondary: #757575;
+$color-border: #e0e0e0;
+$dark-border: #5f5f5f;
+$error-color: #f44336;
+$success-color: #4caf50;
+$warning-color: #ff9800;
+$info-color: #2196f3;
+
+// Темная тема
+$dark-background: #121212;
+$dark-paper: #1e1e1e;
+$dark-primary: #90caf9;
+$dark-secondary: #f48fb1;
+
+// Размеры
+$spacing-unit: 8px;
+$border-radius: 4px;
+$container-width: 1200px;
+$drawer-width: 240px;
+
+// Типографика
+$font-family-base: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+$font-size-base: 16px;
+$font-size-small: 14px;
+$font-size-large: 18px;
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+
+// Медиа-запросы
+$screen-sm: 600px;
+$screen-md: 960px;
+$screen-lg: 1280px;
+$screen-xl: 1920px;
+
+// Анимации
+$transition-duration: 0.3s;
+$transition-timing: ease;
+
+// Z-индексы
+$z-index-modal: 1000;
+$z-index-popover: 900;
+$z-index-dropdown: 800;
+$z-index-appbar: 1100;
+$z-index-header: 700;
+$z-index-footer: 600; 

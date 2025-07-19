@@ -1,0 +1,31 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.content {
+  flex-grow: 1;
+  transition: margin-left 0.2s ease;
+  padding-top: 64px; /* Добавляем отступ для AppBar */
+}
+
+.mainContent {
+  padding: 24px;
+  margin-left: 0; /* Исправляем отрицательный отступ */
+  transition: margin-left 0.2s ease;
+  width: 100%; /* Гарантируем, что контент занимает всю доступную ширину */
+}
+
+.mainContentWithSidebar {
+  margin-left: $drawer-width; /* Добавляем отступ только когда сайдбар открыт */
+}
+
+:global(body.dark-mode) {
+  .content {
+    background-color: $dark-background;
+    color: $text-dark;
+  }
+} 

@@ -1,0 +1,38 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.appBar {
+  transition: all 0.2s ease;
+  z-index: $z-index-appbar;
+  
+  .title {
+    flex-grow: 1;
+  }
+  
+  .menuButton {
+    margin-right: 16px;
+  }
+  
+  .iconContainer {
+    margin-left: 8px;
+  }
+  
+  .avatar {
+    background-color: $primary-light;
+  }
+}
+
+.appBarShift {
+  width: calc(100% - #{$drawer-width});
+  margin-left: $drawer-width;
+}
+
+:global(body.dark-mode) {
+  .appBar {
+    background-color: $dark-background;
+    
+    .avatar {
+      background-color: $dark-primary;
+    }
+  }
+} 

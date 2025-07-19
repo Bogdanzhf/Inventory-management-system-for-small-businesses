@@ -1,88 +1,123 @@
+// Импорт базовых стилей
+@import './styles/reset';
+@import './styles/variables';
+@import './styles/mixins';
+
+// Общие стили
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: 1.5;
+  color: $text-color;
+  background-color: $background-color;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-// Global styles
-* {
-  box-sizing: border-box;
-}
-
-html, body, #root {
-  height: 100%;
-}
-
-// Layout styles
-.app-layout {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.app-content {
-  flex: 1;
-  padding: 24px;
-}
-
-// Form styles
-.form-container {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.form-field {
-  margin-bottom: 16px;
-}
-
-// Table styles
-.table-container {
+// Контейнер
+.container {
   width: 100%;
-  overflow-x: auto;
-}
-
-// Card styles
-.card-hover {
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  max-width: $container-width;
+  margin: 0 auto;
+  padding: 0 $spacing-unit * 2;
   
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  @include respond-to('md') {
+    padding: 0 $spacing-unit * 3;
   }
 }
 
-// Utility styles
+// Типографика
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: $spacing-unit * 2;
+  font-weight: $font-weight-medium;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2rem;
+  
+  @include respond-to('md') {
+    font-size: 2.5rem;
+  }
+}
+
+h2 {
+  font-size: 1.75rem;
+  
+  @include respond-to('md') {
+    font-size: 2rem;
+  }
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1.1rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+p {
+  margin-bottom: $spacing-unit * 2;
+}
+
+a {
+  color: $primary-color;
+  text-decoration: none;
+  @include transition(color);
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Утилиты
 .text-center {
   text-align: center;
 }
 
-.mt-2 {
-  margin-top: 16px;
+.text-right {
+  text-align: right;
 }
 
-.mb-2 {
-  margin-bottom: 16px;
+.text-left {
+  text-align: left;
 }
 
-.mr-1 {
-  margin-right: 8px;
-}
+.mt-1 { margin-top: $spacing-unit; }
+.mt-2 { margin-top: $spacing-unit * 2; }
+.mt-3 { margin-top: $spacing-unit * 3; }
+.mt-4 { margin-top: $spacing-unit * 4; }
 
-// Responsive styles
-@media (max-width: 600px) {
-  .app-content {
-    padding: 16px;
-  }
+.mb-1 { margin-bottom: $spacing-unit; }
+.mb-2 { margin-bottom: $spacing-unit * 2; }
+.mb-3 { margin-bottom: $spacing-unit * 3; }
+.mb-4 { margin-bottom: $spacing-unit * 4; }
+
+.ml-1 { margin-left: $spacing-unit; }
+.ml-2 { margin-left: $spacing-unit * 2; }
+.ml-3 { margin-left: $spacing-unit * 3; }
+.ml-4 { margin-left: $spacing-unit * 4; }
+
+.mr-1 { margin-right: $spacing-unit; }
+.mr-2 { margin-right: $spacing-unit * 2; }
+.mr-3 { margin-right: $spacing-unit * 3; }
+.mr-4 { margin-right: $spacing-unit * 4; }
+
+// Темный режим
+body.dark-mode {
+  color: $text-color-light;
+  background-color: $background-dark;
   
-  .hide-on-mobile {
-    display: none !important;
+  a {
+    color: lighten($primary-color, 15%);
   }
 } 

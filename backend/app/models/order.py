@@ -1,8 +1,9 @@
-from sqlalchemy import Column, String, Integer, Float, ForeignKey, Text, Enum, DateTime
+from sqlalchemy import Column, String, Integer, Float, ForeignKey, Text, DateTime, Enum
 from sqlalchemy.orm import relationship
 import enum
 from datetime import datetime
 
+from app.core.extensions import db
 from app.models.base import BaseModel
 
 
@@ -15,6 +16,14 @@ class OrderStatus(enum.Enum):
     CANCELLED = "cancelled"  # Отменен
 
 
+class OrderType(enum.Enum):
+    """Типы заказов"""
+    PURCHASE = "purchase"  # Закупка (от поставщика)
+    SALE = "sale"  # Продажа (клиенту)
+    TRANSFER = "transfer"  # Перемещение (между складами)
+    RETURN = "return"  # Возврат
+
+
 class Order(BaseModel):
     """Модель заказа"""
     __tablename__ = "orders"
@@ -22,7 +31,8 @@ class Order(BaseModel):
     order_number = Column(String(50), nullable=False, unique=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     supplier_id = Column(Integer, ForeignKey("suppliers.id"), nullable=False)
-    status = Column(Enum(OrderStatus), nullable=False, default=OrderStatus.PENDING)
+    status = Column(String, nullable=False, default=OrderStatus.PENDING.value)
+    order_type = Column(String, nullable=False, default=OrderType.PURCHASE.value)
     total_amount = Column(Float, nullable=False, default=0.0)
     shipping_address = Column(Text, nullable=True)
     notes = Column(Text, nullable=True)
@@ -35,7 +45,7 @@ class Order(BaseModel):
     files = relationship("OrderFile", back_populates="order", lazy="dynamic", cascade="all, delete-orphan")
     
     def __repr__(self):
-        return f"<Order {self.order_number} ({self.status.value})>"
+        return f"<Order {self.order_number} ({self.status})>"
     
     def calculate_total(self):
         """Рассчитать общую сумму заказа"""

@@ -1,8 +1,8 @@
 from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer
 from sqlalchemy.exc import SQLAlchemyError
-from app.db.session import db
 
+from app.core.extensions import db
 
 class BaseModel(db.Model):
     """Базовая модель данных с общими полями"""
@@ -12,37 +12,39 @@ class BaseModel(db.Model):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    def save(self):
+    def save(self, session=None):
         """Сохранение объекта в базу данных с обработкой транзакции"""
+        session = session or db.session
         try:
-            db.session.add(self)
-            db.session.commit()
+            session.add(self)
+            session.commit()
             return self
         except SQLAlchemyError as e:
-            db.session.rollback()
+            session.rollback()
             raise e
 
-    def delete(self):
+    def delete(self, session=None):
         """Удаление объекта из базы данных с обработкой транзакции"""
+        session = session or db.session
         try:
-            db.session.delete(self)
-            db.session.commit()
+            session.delete(self)
+            session.commit()
             return self
         except SQLAlchemyError as e:
-            db.session.rollback()
+            session.rollback()
             raise e
 
     @classmethod
-    def get_by_id(cls, id):
+    def get_by_id(cls, session, id):
         """Получение объекта по ID"""
-        return cls.query.filter_by(id=id).first()
+        return session.query(cls).filter_by(id=id).first()
 
     @classmethod
-    def get_all(cls):
+    def get_all(cls, session):
         """Получение всех объектов"""
-        return cls.query.all()
+        return session.query(cls).all()
 
     @classmethod
-    def get_filtered(cls, **kwargs):
+    def get_filtered(cls, session, **kwargs):
         """Получение объектов с фильтрацией по полям"""
-        return cls.query.filter_by(**kwargs).all() 
+        return session.query(cls).filter_by(**kwargs).all() 

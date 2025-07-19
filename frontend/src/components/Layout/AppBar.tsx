@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import {
   AppBar as MuiAppBar,
-  AppBarProps as MuiAppBarProps,
   Toolbar,
   Typography,
   IconButton,
@@ -15,7 +14,7 @@ import {
   Tooltip,
   Badge
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import classNames from 'classnames';
 import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -24,34 +23,9 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 
 import { useStores } from '../../store';
+import styles from './AppBar.module.scss';
 
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
-  drawerWidth: number;
-}
-
-const StyledAppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open' && prop !== 'drawerWidth',
-})<AppBarProps>(({ theme, open, drawerWidth }) => ({
-  transition: theme.transitions.create(['margin', 'width'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-interface Props {
-  drawerWidth: number;
-}
-
-const AppBar: React.FC<Props> = ({ drawerWidth }) => {
+const AppBar: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { uiStore, authStore } = useStores();
@@ -94,18 +68,23 @@ const AppBar: React.FC<Props> = ({ drawerWidth }) => {
   };
 
   return (
-    <StyledAppBar position="fixed" open={sidebarOpen} drawerWidth={drawerWidth}>
+    <MuiAppBar 
+      position="fixed" 
+      className={classNames(styles.appBar, {
+        [styles.appBarShift]: sidebarOpen
+      })}
+    >
       <Toolbar>
         <IconButton
           color="inherit"
           aria-label="open drawer"
           onClick={toggleSidebar}
           edge="start"
-          sx={{ mr: 2 }}
+          className={styles.menuButton}
         >
           <MenuIcon />
         </IconButton>
-        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+        <Typography variant="h6" noWrap component="div" className={styles.title}>
           {t('common.appName')}
         </Typography>
         
@@ -117,7 +96,7 @@ const AppBar: React.FC<Props> = ({ drawerWidth }) => {
         </Tooltip>
         
         {/* Language menu */}
-        <Box sx={{ ml: 1 }}>
+        <Box className={styles.iconContainer}>
           <Tooltip title={t('settings.language')}>
             <IconButton onClick={handleOpenLangMenu} color="inherit">
               <LanguageIcon />
@@ -154,7 +133,7 @@ const AppBar: React.FC<Props> = ({ drawerWidth }) => {
         </Box>
         
         {/* Notifications */}
-        <Box sx={{ ml: 1 }}>
+        <Box className={styles.iconContainer}>
           <Tooltip title={t('common.notifications')}>
             <IconButton color="inherit">
               <Badge badgeContent={2} color="error">
@@ -165,11 +144,11 @@ const AppBar: React.FC<Props> = ({ drawerWidth }) => {
         </Box>
         
         {/* User menu */}
-        <Box sx={{ ml: 1 }}>
+        <Box className={styles.iconContainer}>
           <Tooltip title={user?.name || ''}>
             <IconButton onClick={handleOpenUserMenu} color="inherit">
               {user?.name ? (
-                <Avatar alt={user.name} src="/static/avatar.jpg">
+                <Avatar alt={user.name} src="/static/avatar.jpg" className={styles.avatar}>
                   {user.name.charAt(0).toUpperCase()}
                 </Avatar>
               ) : (
@@ -201,7 +180,7 @@ const AppBar: React.FC<Props> = ({ drawerWidth }) => {
           </Menu>
         </Box>
       </Toolbar>
-    </StyledAppBar>
+    </MuiAppBar>
   );
 };
 
