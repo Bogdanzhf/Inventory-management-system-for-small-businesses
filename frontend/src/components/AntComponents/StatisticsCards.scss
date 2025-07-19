@@ -1,5 +1,5 @@
-@import '../../styles/variables';
-@import '../../styles/mixins';
+@use 'sass:color';
+@use '../../styles/mixins' as *;
 
 .statistics-cards {
   margin-bottom: $spacing-unit * 3;
@@ -55,7 +55,7 @@
 :global(body.dark-mode) {
   .statistics-cards {
     .statistics-card {
-      background-color: darken($background-dark, 3%);
+      background-color: color.adjust($background-dark, $lightness: -3%);
       border-color: $background-dark;
 
       .ant-statistic-title {

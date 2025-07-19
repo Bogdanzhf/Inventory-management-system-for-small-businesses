@@ -34,4 +34,4 @@ const CustomSnackbar: React.FC = () => {
   );
 };
 
-export default observer(CustomSnackbar); 
+export default observer(CustomSnackbar);

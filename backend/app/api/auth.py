@@ -4,10 +4,10 @@ from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_tok
 from marshmallow import ValidationError
 from sqlalchemy.exc import SQLAlchemyError
 
-from app.models import User, UserRole
-from app.core.auth import generate_tokens
-from app.core.errors import AuthError
-from app.core.extensions import db
+from ..models import User, UserRole
+from ..core.auth import generate_tokens
+from ..core.errors import AuthError
+from ..core.extensions import db
 
 # Создание логгера
 logger = logging.getLogger(__name__)

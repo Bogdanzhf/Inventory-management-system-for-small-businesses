@@ -1,7 +1,8 @@
 // Импорт базовых стилей
-@import './styles/reset';
-@import './styles/variables';
-@import './styles/mixins';
+@use './styles/reset';
+@use './styles/variables' as *;
+@use './styles/mixins' as *;
+@use 'sass:color';
 
 // Общие стили
 body {
@@ -118,6 +119,6 @@ body.dark-mode {
   background-color: $background-dark;
   
   a {
-    color: lighten($primary-color, 15%);
+    color: color.adjust($primary-color, $lightness: 15%);
   }
 } 

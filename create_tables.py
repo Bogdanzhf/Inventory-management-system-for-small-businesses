@@ -58,14 +58,11 @@ def create_tables():
     """Создание таблиц в базе данных через Flask приложение"""
     try:
         # Импортируем Flask app и модели
-        from backend.app.main import create_app
+        from backend.app.main import app
         from backend.app.models import User, UserRole
         from backend.app.core.extensions import db
         from werkzeug.security import generate_password_hash
 
-        # Создаем Flask приложение
-        app = create_app()
-        
         # Устанавливаем URI для подключения к БД
         app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
         

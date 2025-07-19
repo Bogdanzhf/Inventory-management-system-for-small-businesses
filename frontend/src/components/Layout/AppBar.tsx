@@ -12,7 +12,7 @@ import {
   Menu,
   MenuItem,
   Tooltip,
-  Badge
+  Badge,
 } from '@mui/material';
 import classNames from 'classnames';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -31,47 +31,47 @@ const AppBar: React.FC = () => {
   const { uiStore, authStore } = useStores();
   const { sidebarOpen, toggleSidebar, darkMode, toggleDarkMode, language, setLanguage } = uiStore;
   const { user, logout } = authStore;
-  
+
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [anchorElLang, setAnchorElLang] = useState<null | HTMLElement>(null);
-  
+
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
-  
+
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  
+
   const handleOpenLangMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElLang(event.currentTarget);
   };
-  
+
   const handleCloseLangMenu = () => {
     setAnchorElLang(null);
   };
-  
+
   const handleLogout = () => {
     logout();
     navigate('/login');
     handleCloseUserMenu();
   };
-  
+
   const handleProfile = () => {
     navigate('/profile');
     handleCloseUserMenu();
   };
-  
+
   const handleLanguageChange = (lang: string) => {
     setLanguage(lang);
     handleCloseLangMenu();
   };
 
   return (
-    <MuiAppBar 
-      position="fixed" 
+    <MuiAppBar
+      position="fixed"
       className={classNames(styles.appBar, {
-        [styles.appBarShift]: sidebarOpen
+        [styles.appBarShift]: sidebarOpen,
       })}
     >
       <Toolbar>
@@ -87,14 +87,14 @@ const AppBar: React.FC = () => {
         <Typography variant="h6" noWrap component="div" className={styles.title}>
           {t('common.appName')}
         </Typography>
-        
+
         {/* Theme toggle */}
         <Tooltip title={darkMode ? t('settings.lightMode') : t('settings.darkMode')}>
           <IconButton color="inherit" onClick={toggleDarkMode}>
             {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
           </IconButton>
         </Tooltip>
-        
+
         {/* Language menu */}
         <Box className={styles.iconContainer}>
           <Tooltip title={t('settings.language')}>
@@ -117,21 +117,15 @@ const AppBar: React.FC = () => {
             open={Boolean(anchorElLang)}
             onClose={handleCloseLangMenu}
           >
-            <MenuItem 
-              onClick={() => handleLanguageChange('ru')} 
-              selected={language === 'ru'}
-            >
+            <MenuItem onClick={() => handleLanguageChange('ru')} selected={language === 'ru'}>
               Русский
             </MenuItem>
-            <MenuItem 
-              onClick={() => handleLanguageChange('en')} 
-              selected={language === 'en'}
-            >
+            <MenuItem onClick={() => handleLanguageChange('en')} selected={language === 'en'}>
               English
             </MenuItem>
           </Menu>
         </Box>
-        
+
         {/* Notifications */}
         <Box className={styles.iconContainer}>
           <Tooltip title={t('common.notifications')}>
@@ -142,7 +136,7 @@ const AppBar: React.FC = () => {
             </IconButton>
           </Tooltip>
         </Box>
-        
+
         {/* User menu */}
         <Box className={styles.iconContainer}>
           <Tooltip title={user?.name || ''}>
@@ -171,12 +165,8 @@ const AppBar: React.FC = () => {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            <MenuItem onClick={handleProfile}>
-              {t('navigation.profile')}
-            </MenuItem>
-            <MenuItem onClick={handleLogout}>
-              {t('auth.logout')}
-            </MenuItem>
+            <MenuItem onClick={handleProfile}>{t('navigation.profile')}</MenuItem>
+            <MenuItem onClick={handleLogout}>{t('auth.logout')}</MenuItem>
           </Menu>
         </Box>
       </Toolbar>
@@ -184,4 +174,4 @@ const AppBar: React.FC = () => {
   );
 };
 
-export default observer(AppBar); 
+export default observer(AppBar);

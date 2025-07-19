@@ -24,10 +24,10 @@ interface RestockRecommendationsProps {
 /**
  * Компонент для отображения рекомендаций по пополнению запасов
  */
-const RestockRecommendations: React.FC<RestockRecommendationsProps> = ({ 
+const RestockRecommendations: React.FC<RestockRecommendationsProps> = ({
   recommendations,
   loading,
-  onCreateOrder
+  onCreateOrder,
 }) => {
   // Определение цвета тега срочности
   const getUrgencyColor = (days: number): string => {
@@ -51,14 +51,14 @@ const RestockRecommendations: React.FC<RestockRecommendationsProps> = ({
       title: 'Товар',
       dataIndex: 'product_name',
       key: 'product_name',
-      sorter: (a: RestockRecommendation, b: RestockRecommendation) => 
+      sorter: (a: RestockRecommendation, b: RestockRecommendation) =>
         a.product_name.localeCompare(b.product_name),
     },
     {
       title: 'Текущий запас',
       dataIndex: 'current_quantity',
       key: 'current_quantity',
-      sorter: (a: RestockRecommendation, b: RestockRecommendation) => 
+      sorter: (a: RestockRecommendation, b: RestockRecommendation) =>
         a.current_quantity - b.current_quantity,
     },
     {
@@ -70,7 +70,7 @@ const RestockRecommendations: React.FC<RestockRecommendationsProps> = ({
       title: 'Дней до истощения',
       dataIndex: 'days_until_stockout',
       key: 'days_until_stockout',
-      sorter: (a: RestockRecommendation, b: RestockRecommendation) => 
+      sorter: (a: RestockRecommendation, b: RestockRecommendation) =>
         a.days_until_stockout - b.days_until_stockout,
       render: (days: number) => (
         <Tooltip title={`${days.toFixed(1)} дней до истощения запаса`}>
@@ -84,13 +84,13 @@ const RestockRecommendations: React.FC<RestockRecommendationsProps> = ({
       title: 'Рекомендуемое кол-во',
       dataIndex: 'recommended_qty',
       key: 'recommended_qty',
-      sorter: (a: RestockRecommendation, b: RestockRecommendation) => 
+      sorter: (a: RestockRecommendation, b: RestockRecommendation) =>
         a.recommended_qty - b.recommended_qty,
     },
     {
       title: 'Действия',
       key: 'actions',
-      render: (_: any, record: RestockRecommendation) => (
+      render: (_: unknown, record: RestockRecommendation) => (
         <Button
           type="primary"
           icon={<ShoppingCartOutlined />}
@@ -115,7 +115,7 @@ const RestockRecommendations: React.FC<RestockRecommendationsProps> = ({
         </div>
       ) : recommendations && recommendations.length > 0 ? (
         <Table
-          dataSource={recommendations.map(rec => ({...rec, key: rec.product_id}))}
+          dataSource={recommendations.map(rec => ({ ...rec, key: rec.product_id }))}
           columns={columns}
           pagination={{ pageSize: 5 }}
           className="restock-table"
@@ -127,4 +127,4 @@ const RestockRecommendations: React.FC<RestockRecommendationsProps> = ({
   );
 };
 
-export default RestockRecommendations; 
+export default RestockRecommendations;

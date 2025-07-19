@@ -1,4 +1,4 @@
-@import './variables';
+@forward './variables'; // Переменные доступны для импорта через миксины
 
 // Флекс-контейнеры
 @mixin flex-center {

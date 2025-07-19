@@ -1,5 +1,4 @@
-@import '../../styles/variables';
-@import '../../styles/mixins';
+@use '../../styles/mixins' as *;
 
 .appBar {
   transition: all 0.2s ease;

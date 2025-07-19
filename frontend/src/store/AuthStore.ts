@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { apiService } from '../services/api';
 import { Auth, User, LoginData, RegisterData } from '../types/models';
-import { RootStore } from './index';
+import { RootStore } from './storeImplementation';
 
 export class AuthStore {
   isAuthenticated: boolean = false;

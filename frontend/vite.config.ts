@@ -32,16 +32,17 @@ export default defineConfig({
         target: 'http://localhost:5000', // Прямой адрес бэкенда
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        rewrite: (path) => path, // Сохраняем полный путь с префиксом /api
         configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {
-            console.log('proxy error', err);
+            console.log('Ошибка прокси:', err);
           });
           proxy.on('proxyReq', (proxyReq, req, _res) => {
-            console.log('Sending Request to the Target:', req.method, req.url);
+            // Логирование исходного URL и конечного URL
+            console.log(`Отправка запроса: ${req.method} ${req.url} -> ${proxyReq.path}`);
           });
           proxy.on('proxyRes', (proxyRes, req, _res) => {
-            console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
+            console.log(`Получен ответ: ${proxyRes.statusCode} для ${req.url}`);
           });
         },
       }
@@ -53,7 +54,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        // Удалили additionalData с импортами SCSS
+        // Импорты SCSS переехали в соответствующие файлы
       }
     }
   },

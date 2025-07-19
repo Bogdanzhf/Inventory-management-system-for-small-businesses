@@ -4,13 +4,14 @@ from flask import Flask, jsonify, redirect, url_for, request
 from flask_cors import CORS
 from dotenv import load_dotenv
 
-from app.core.config import get_settings
-from app.db.session import init_db, check_db_connection
-from app.api import init_routes
-from app.schemas import register_schemas
-from app.core.errors import register_error_handlers
-from app.core.celery import init_celery, celery as celery_app
-from app.core.extensions import init_extensions
+# Используем относительные импорты
+from .core.config import get_settings
+from .db.session import init_db, check_db_connection
+from .api import init_routes
+from .schemas import register_schemas
+from .core.errors import register_error_handlers
+from .core.celery import init_celery, celery as celery_app
+from .core.extensions import init_extensions
 
 # Настройка логирования
 logging.basicConfig(
@@ -39,6 +40,10 @@ def create_app():
         "postgresql://postgres:12345678@localhost:5432/inventory_management_system"
     )
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    # Настройка JWT
+    app.config['JWT_SECRET_KEY'] = os.environ.get("JWT_SECRET_KEY", "your-secret-key-here-for-jwt-tokens")
+    app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "your-flask-secret-key-here")
     
     # Настройка Celery
     app.config['CELERY_BROKER_URL'] = os.environ.get(

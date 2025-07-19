@@ -2,7 +2,7 @@ import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 
 // Создаем экземпляр axios с базовыми настройками
 const api: AxiosInstance = axios.create({
-  baseURL: '/api', // Будет проксироваться через nginx
+  baseURL: '/api', // Будет проксироваться через vite и nginx
   headers: {
     'Content-Type': 'application/json',
   },

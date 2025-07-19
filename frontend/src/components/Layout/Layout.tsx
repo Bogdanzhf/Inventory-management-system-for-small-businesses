@@ -20,9 +20,9 @@ const Layout: React.FC = () => {
       <AppBar />
       <Sidebar />
       <div className={styles.content}>
-        <div 
+        <div
           className={classNames(styles.mainContent, {
-            [styles.mainContentWithSidebar]: sidebarOpen
+            [styles.mainContentWithSidebar]: sidebarOpen,
           })}
         >
           <Outlet />
@@ -33,4 +33,4 @@ const Layout: React.FC = () => {
   );
 };
 
-export default observer(Layout); 
+export default observer(Layout);

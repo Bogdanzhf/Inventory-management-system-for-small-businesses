@@ -1,5 +1,5 @@
-@import '../../styles/variables';
-@import '../../styles/mixins';
+@use 'sass:color';
+@use '../../styles/mixins' as *;
 
 .restock-recommendations-card {
   margin-bottom: $spacing-unit * 3;
@@ -41,7 +41,7 @@
 // Темный режим
 :global(body.dark-mode) {
   .restock-recommendations-card {
-    background-color: darken($background-dark, 3%);
+    background-color: color.adjust($background-dark, $lightness: -3%);
     border-color: $background-dark;
 
     .restock-title,
@@ -51,17 +51,17 @@
     }
 
     .ant-table-thead > tr > th {
-      background-color: darken($background-dark, 6%);
+      background-color: color.adjust($background-dark, $lightness: -6%);
       color: $text-color-light;
     }
 
     .ant-table-tbody > tr > td {
-      background-color: darken($background-dark, 3%);
+      background-color: color.adjust($background-dark, $lightness: -3%);
       border-bottom-color: $background-dark;
     }
 
     .ant-pagination-item-link {
-      background-color: darken($background-dark, 3%);
+      background-color: color.adjust($background-dark, $lightness: -3%);
       color: $text-color-light;
     }
   }

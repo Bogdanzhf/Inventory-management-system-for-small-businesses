@@ -31,4 +31,4 @@ const OwnerRoute: React.FC<OwnerRouteProps> = ({ children }) => {
   return <>{children}</>;
 };
 
-export default observer(OwnerRoute); 
+export default observer(OwnerRoute);

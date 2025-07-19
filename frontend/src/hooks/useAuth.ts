@@ -16,7 +16,7 @@ export const useAuth = () => {
    */
   const login = async (email: string, password: string, redirectTo: string = '/dashboard') => {
     try {
-      await authStore.login({email, password});
+      await authStore.login({ email, password });
       uiStore.showSnackbar('Вход выполнен успешно', 'success');
       navigate(redirectTo);
       return true;
@@ -41,7 +41,7 @@ export const useAuth = () => {
     redirectTo: string = '/login'
   ) => {
     try {
-      await authStore.register({email, password, name: fullName});
+      await authStore.register({ email, password, name: fullName });
       uiStore.showSnackbar('Регистрация выполнена успешно', 'success');
       navigate(redirectTo);
       return true;
@@ -109,6 +109,6 @@ export const useAuth = () => {
     hasRole,
     isAdmin,
     isOwner,
-    isEmployee
+    isEmployee,
   };
-}; 
+};

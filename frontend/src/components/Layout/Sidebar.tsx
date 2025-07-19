@@ -33,9 +33,10 @@ const Sidebar: React.FC = () => {
   const { uiStore, authStore } = useStores();
   const { sidebarOpen } = uiStore;
   const { user } = authStore;
-  
-  const isActive = (path: string) => location.pathname === path || location.pathname.startsWith(`${path}/`);
-  
+
+  const isActive = (path: string) =>
+    location.pathname === path || location.pathname.startsWith(`${path}/`);
+
   const menuItems = [
     {
       text: t('navigation.dashboard'),
@@ -68,7 +69,7 @@ const Sidebar: React.FC = () => {
       roles: [UserRole.ADMIN],
     },
   ];
-  
+
   const accountItems = [
     {
       text: t('navigation.profile'),
@@ -87,11 +88,11 @@ const Sidebar: React.FC = () => {
   // Вспомогательная функция для проверки ролей пользователя
   const hasRole = (role: UserRole | UserRole[]): boolean => {
     if (!user || !user.role) return false;
-    
+
     if (Array.isArray(role)) {
       return role.includes(user.role as UserRole);
     }
-    
+
     return user.role === role;
   };
 
@@ -102,51 +103,53 @@ const Sidebar: React.FC = () => {
       open={sidebarOpen}
       className={styles.drawer}
       classes={{
-        paper: styles.drawerPaper
+        paper: styles.drawerPaper,
       }}
     >
       <Toolbar />
       <div className={styles.drawerContainer}>
         <List component="nav">
-          {menuItems.map((item) => (
-            hasRole(item.roles) && (
-              <ListItem key={item.path} disablePadding>
-                <ListItemButton
-                  onClick={() => navigate(item.path)}
-                  selected={isActive(item.path)}
-                  className={classNames({
-                    [styles.activeItem]: isActive(item.path)
-                  })}
-                >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.text} />
-                </ListItemButton>
-              </ListItem>
-            )
-          ))}
+          {menuItems.map(
+            item =>
+              hasRole(item.roles) && (
+                <ListItem key={item.path} disablePadding>
+                  <ListItemButton
+                    onClick={() => navigate(item.path)}
+                    selected={isActive(item.path)}
+                    className={classNames({
+                      [styles.activeItem]: isActive(item.path),
+                    })}
+                  >
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.text} />
+                  </ListItemButton>
+                </ListItem>
+              )
+          )}
         </List>
         <Divider className={styles.divider} />
         <List component="nav">
-          {accountItems.map((item) => (
-            hasRole(item.roles) && (
-              <ListItem key={item.path} disablePadding>
-                <ListItemButton
-                  onClick={() => navigate(item.path)}
-                  selected={isActive(item.path)}
-                  className={classNames({
-                    [styles.activeItem]: isActive(item.path)
-                  })}
-                >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.text} />
-                </ListItemButton>
-              </ListItem>
-            )
-          ))}
+          {accountItems.map(
+            item =>
+              hasRole(item.roles) && (
+                <ListItem key={item.path} disablePadding>
+                  <ListItemButton
+                    onClick={() => navigate(item.path)}
+                    selected={isActive(item.path)}
+                    className={classNames({
+                      [styles.activeItem]: isActive(item.path),
+                    })}
+                  >
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.text} />
+                  </ListItemButton>
+                </ListItem>
+              )
+          )}
         </List>
       </div>
     </Drawer>
   );
 };
 
-export default observer(Sidebar); 
+export default observer(Sidebar);

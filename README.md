@@ -1,92 +1,173 @@
-# Система управления запасами для малого бизнеса
+# Inventory Management System
 
-Платформа, позволяющая малым предприятиям эффективно управлять запасами, отслеживать заказы и взаимодействовать с поставщиками.
+Comprehensive inventory management solution with React frontend, Flask backend, and PostgreSQL database.
 
-## Функциональные возможности
+## Features
 
-- **Аутентификация и авторизация**: Регистрация и вход с различными ролями (владельцы бизнеса, сотрудники, администраторы)
-- **Управление запасами**: CRUD-операции для товаров с указанием количества, цены и поставщика
-- **Управление заказами**: Создание заказов, отслеживание статуса и интеграция с поставщиками
-- **Личный кабинет**: История заказов, управление профилем, аналитика по запасам
-- **Автоматические уведомления**: Оповещения о низком уровне запасов, статусе заказов
-- **Аналитика**: Визуализация данных о запасах и заказах
+- User authentication and authorization with JWT
+- Inventory tracking and management
+- Order processing
+- Supplier management
+- Analytics and forecasting
+- Multi-language support (i18n)
+- Dark mode
+- Responsive design
 
-## Технический стек
+## Tech Stack
 
 ### Frontend
-- React с TypeScript
-- Material-UI для компонентов пользовательского интерфейса
-- MobX для управления состояниями
-- Chart.js/Recharts для визуализации данных
+- React with TypeScript
+- MUI (Material UI) components
+- Ant Design components
+- MobX for state management
+- Vite for building and development
+- SCSS modules for styling
+- i18next for internationalization
 
 ### Backend
-- Python с Flask
-- PostgreSQL для хранения данных
+- Flask (Python)
+- PostgreSQL database
 - SQLAlchemy ORM
+- Flask-JWT-Extended for authentication
+- Celery for background tasks
+- Marshmallow for serialization
 
-### Интеграции
-- Dadata API для автозаполнения адресов
-- SendGrid для email-уведомлений
+### Infrastructure
+- Docker for containerization
+- Nginx for web server and reverse proxy
 
-### DevOps
-- Docker и docker-compose для контейнеризации
-- Nginx с TLS для обеспечения безопасности
+## Prerequisites
 
-## Запуск проекта
+- Node.js 16+ and npm
+- Python 3.9+
+- PostgreSQL 12+
+- Docker and Docker Compose (optional)
 
-### Требования
-- Docker и docker-compose
-- Node.js 16+ и npm/yarn (для локальной разработки фронтенда)
-- Python 3.9+ (для локальной разработки бэкенда)
-- PostgreSQL 13+ (или использование контейнера)
+## Installation and Setup
 
-### Разработка
+### Quick Start
 
-```bash
-# Клонировать репозиторий
-git clone https://github.com/username/inventory-management-system.git
-cd inventory-management-system
+1. Clone the repository
+2. Run the setup script:
 
-# Запуск в режиме разработки
+```
+.\run.bat
+```
+
+### Manual Setup
+
+#### Database Setup
+
+1. Ensure PostgreSQL is running
+2. Set up the database:
+
+```
+python setup_db.py
+```
+
+#### Backend Setup
+
+1. Navigate to the backend directory:
+
+```
+cd backend
+```
+
+2. Create and activate a virtual environment:
+
+```
+python -m venv venv
+venv\Scripts\activate
+```
+
+3. Install dependencies:
+
+```
+pip install -r requirements.txt
+```
+
+4. Run the backend server:
+
+```
+python -m app.main
+```
+
+The backend API will be available at http://localhost:5000/api/
+
+#### Frontend Setup
+
+1. Navigate to the frontend directory:
+
+```
+cd frontend
+```
+
+2. Install dependencies:
+
+```
+npm install
+```
+
+3. Start the development server:
+
+```
+npm run dev
+```
+
+The frontend will be available at http://localhost:3000/
+
+## Docker Setup
+
+To run the entire application using Docker:
+
+```
 docker-compose -f docker-compose.dev.yml up
 ```
 
-### Производственная среда
+## API Documentation
 
-```bash
-# Запуск в производственном режиме
-docker-compose up -d
-```
+The API documentation is available at http://localhost:5000/api/docs when the backend is running.
 
-## Структура проекта
+## Default Users
+
+The system is initialized with a default admin user:
+
+- Email: admin@example.com
+- Password: admin123
+
+## Project Structure
 
 ```
 inventory-management-system/
-├── backend/               # Flask API
-│   ├── app/               # Исходный код приложения
-│   ├── Dockerfile         # Сборка бэкенда
-│   └── requirements.txt   # Зависимости Python
-├── frontend/              # React приложение
-│   ├── src/               # Исходный код фронтенда
-│   ├── Dockerfile         # Сборка фронтенда
-│   └── package.json       # Зависимости Node.js
-├── nginx/                 # Конфигурация Nginx
-├── database/              # Миграции и скрипты БД
-└── docker-compose.yml     # Конфигурация Docker
+├── backend/               # Flask backend
+│   ├── app/               # Main application package
+│   │   ├── api/           # API endpoints
+│   │   ├── core/          # Core functionality
+│   │   ├── db/            # Database configuration
+│   │   ├── models/        # Database models
+│   │   └── services/      # Business logic services
+├── frontend/              # React frontend
+│   ├── public/            # Static assets
+│   └── src/               # Source code
+│       ├── components/    # Reusable components
+│       ├── hooks/         # Custom React hooks
+│       ├── pages/         # Page components
+│       ├── services/      # API services
+│       ├── store/         # MobX stores
+│       ├── styles/        # Global styles
+│       └── utils/         # Utility functions
+├── nginx/                 # Nginx configuration
+└── docker-compose.yml     # Docker Compose configuration
 ```
 
-## Тестирование
+## Troubleshooting
 
-```bash
-# Запуск тестов бэкенда
-cd backend
-pytest
+If you encounter any issues:
 
-# Запуск тестов фронтенда
-cd frontend
-npm test
-```
+1. Ensure database is properly set up
+2. Check logs for errors
+3. Verify environment variables are correctly set
 
-## Лицензия
+## License
 
-MIT 
+This project is licensed under the MIT License - see the LICENSE file for details. 

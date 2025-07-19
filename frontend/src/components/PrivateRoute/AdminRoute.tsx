@@ -31,4 +31,4 @@ const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
   return <>{children}</>;
 };
 
-export default observer(AdminRoute); 
+export default observer(AdminRoute);

@@ -1,10 +1,10 @@
 import React from 'react';
-import { Card, Row, Col, Statistic, Space, Typography } from 'antd';
-import { 
-  ShoppingOutlined, 
-  ShoppingCartOutlined, 
+import { Card, Row, Col, Statistic, Typography } from 'antd';
+import {
+  ShoppingOutlined,
+  ShoppingCartOutlined,
   UserOutlined,
-  WarningOutlined 
+  WarningOutlined,
 } from '@ant-design/icons';
 import './StatisticsCards.scss';
 
@@ -23,19 +23,17 @@ const StatisticsCards: React.FC<StatisticsCardsProps> = ({
   lowStockProducts = 0,
   totalOrders = 0,
   pendingOrders = 0,
-  loading = false
+  loading = false,
 }) => {
   return (
     <div className="statistics-cards">
-      <Title level={4} className="statistics-title">Общая статистика</Title>
+      <Title level={4} className="statistics-title">
+        Общая статистика
+      </Title>
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
           <Card className="statistics-card product-card" loading={loading}>
-            <Statistic
-              title="Всего товаров"
-              value={totalProducts}
-              prefix={<ShoppingOutlined />}
-            />
+            <Statistic title="Всего товаров" value={totalProducts} prefix={<ShoppingOutlined />} />
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={6}>
@@ -72,4 +70,4 @@ const StatisticsCards: React.FC<StatisticsCardsProps> = ({
   );
 };
 
-export default StatisticsCards; 
+export default StatisticsCards;

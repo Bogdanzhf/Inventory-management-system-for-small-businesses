@@ -1,2 +1,2 @@
 // Этот файл используется как мок для импортов файлов в тестах
-module.exports = 'test-file-stub'; 
+module.exports = 'test-file-stub';
